@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="nameTV" type="id" />
+    <item name="followBtnb" type="id" />
+    <item name="followBtn" type="id" />
+</resources>

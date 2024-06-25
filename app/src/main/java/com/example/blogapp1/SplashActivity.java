@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (user == null){
-                    startActivity(new Intent(SplashActivity.this, FragmentReplaceActivity.class));
+                    startActivity(new Intent(SplashActivity.this, ReplacerActivity.class));
 
                 }else {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));

@@ -20,9 +20,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.blogapp1.FragmentReplaceActivity;
+import com.example.blogapp1.ReplacerActivity;
 import com.example.blogapp1.MainActivity;
 import com.example.blogapp1.R;
+import com.example.blogapp1.ReplacerActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -92,6 +93,12 @@ public class LoginFragment extends Fragment {
 
     }
     private void clickListener() {
+        forgotPasswordTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ReplacerActivity) getActivity()).setFragment(new CreateAccountFragment());
+            }
+        });
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,7 +144,7 @@ public class LoginFragment extends Fragment {
         signUpTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((FragmentReplaceActivity) getActivity()).setFragment(new CreateAccountFragment());
+                ((ReplacerActivity) getActivity()).setFragment(new CreateAccountFragment());
             }
         });
     }
@@ -200,6 +207,9 @@ public class LoginFragment extends Fragment {
         map.put("email", account.getEmail());
         map.put("profileImage",String.valueOf(account.getPhotoUrl()));
         map.put("uid", user.getUid());
+        map.put("following", 0);
+        map.put("followers",0);
+        map.put("status","");
 
         FirebaseFirestore.getInstance().collection("Users").document(user.getUid())
                 .set(map)

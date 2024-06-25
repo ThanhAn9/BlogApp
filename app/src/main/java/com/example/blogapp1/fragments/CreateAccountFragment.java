@@ -15,9 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.blogapp1.FragmentReplaceActivity;
+import com.example.blogapp1.ReplacerActivity;
 import com.example.blogapp1.MainActivity;
 import com.example.blogapp1.R;
+import com.example.blogapp1.ReplacerActivity;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -69,7 +70,7 @@ public class CreateAccountFragment extends Fragment {
         loginTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((FragmentReplaceActivity) getActivity()).setFragment(new LoginFragment());
+                ((ReplacerActivity) getActivity()).setFragment(new LoginFragment());
             }
         });
         signUpBtn.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +113,7 @@ public class CreateAccountFragment extends Fragment {
 
                             user.sendEmailVerification()
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
+                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()){
                                                 Toast.makeText(getContext(), "Email verification link send",Toast.LENGTH_SHORT).show();
@@ -139,6 +140,9 @@ public class CreateAccountFragment extends Fragment {
         map.put("email", email);
         map.put("profileImage"," ");
         map.put("uid", user.getUid());
+        map.put("following", 0);
+        map.put("followers",0);
+        map.put("status","");
 
         FirebaseFirestore.getInstance().collection("Users").document(user.getUid())
                 .set(map)
