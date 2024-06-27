@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +19,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-//import android.widget.Toolbar;
+import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.blogapp1.R;
 import com.example.blogapp1.model.PostimageModel;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,8 +35,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirestoreRegistrar;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.auth.User;
-import com.google.firebase.firestore.MetadataChanges;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import org.w3c.dom.Document;
 
@@ -47,16 +42,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Profile extends Fragment {
 
-    private TextView nameTv, toolbarNameTv, followingCountTv,followersCountTv, postCountTv,statusTv;
+    private TextView nameTv, toolbarnameTv, followingCountTv, PostCountTv;
     private CircleImageView profileImage;
     private Button followBtn;
     private RecyclerView recyclerView;
     private FirebaseUser user;
+    private View statusTv;
+    private View followersCountTv;
+    private View postCountTv;
     private LinearLayout countLayout;
 
     boolean isMyProfile = true;
     String uid;
-    FirestoreRecyclerAdapter<PostimageModel, PostImageHolder> adapter;
+    FirestoreRecyclerAdapter<PostimageModel, PostimageHolder> adapter;
 
     public Profile() {
         // Required empty public constructor
@@ -85,19 +83,18 @@ public class Profile extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
-        loadPostImages();
+        loadPostImage();
 
-        recyclerView.setAdapter(adapter);
     }
 
     private void init(View view) {
 
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = view.findViewById(R.id.toolbar);
         assert getActivity() != null;
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         nameTv = view.findViewById(R.id.nameTv);
         statusTv = view.findViewById(R.id.statusTV);
-        toolbarNameTv = view.findViewById(R.id.toolbarnameTv);
+        toolbarnameTv = view.findViewById(R.id.toolbarnameTv);
         followersCountTv = view.findViewById(R.id.followersCountTv);
         followingCountTv = view.findViewById(R.id.followingCountTv);
         postCountTv = view.findViewById(R.id.postCountTv);
@@ -115,84 +112,87 @@ public class Profile extends Fragment {
 
     private void loadBasicData() {
 
-        DocumentReference userRef = FirebaseFirestore.getInstance().collection("Users")
+        DocumentReference userRef = FirebaseFirestore.getInstance().collection("User")
                 .document(user.getUid());
         userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                if (error != null)
+                if (error != null) {
+
                     return;
 
-                assert value!=null;
-                if (value.exists()) {
+                    if (value.exists()) {
 
 
-                    String name = value.getString("name");
-                    String status = value.getString("status");
-                    int followers = value.getLong("followers").intValue();
-                    int following = value.getLong("following").intValue();
+                        String name = value.getString("name");
+                        String status = value.getString("status");
+                        int followers = value.getLong("followers").intValue();
+                        int following = value.getLong("following").intValue();
 
-                    String profileURL = value.getString("profileImage");
+                        String profileURL = value.getString("profileimage");
 
-                    nameTv.setText(name);
-                    toolbarNameTv.setText(name);
-                    statusTv.setText(status);
-                    followersCountTv.setText(String.valueOf(followers));
-                    followingCountTv.setText(String.valueOf(following));
+                        nameTv.setText(name);
+                        toolbarnameTv.setText(name);
+                        statusTv.setText(status);
+                        followersCountTv.setText(String.valueOf(followers));
+                        followingCountTv.setText(String.valueOf(following));
 
-                    Glide.with(getContext().getApplicationContext())
-                            .load(profileURL)
-                            .placeholder(R.drawable.ic_person)
-                            .timeout(6500)
-                            .into(profileImage);
+                        Glide.with(getContext().getApplicationContext())
+                                .load(profileURL)
+                                .placeholder(R.drawable.ic_person)
+                                .timeout(6500)
+                                .into(profileImage);
 
+                    }
                 }
-
             }
         });
     }
 
-    private void loadPostImages(){
-        if(isMyProfile){
-            uid=user.getUid();
+    private  void loadPostImage() {
+
+        if (isMyProfile){
+            uid = user.getUid();
         }else {
 
         }
-        uid = user.getUid();
-        DocumentReference reference= FirebaseFirestore.getInstance().collection("Users").document(uid);
+
+        DocumentReference reference = FirebaseFirestore.getInstance().collection("Users").document(uid);
+
         Query query = reference.collection("Images");
-        FirestoreRecyclerOptions<PostimageModel> options = new FirestoreRecyclerOptions.Builder<PostimageModel>()
+
+        FirestoreRecyclerOptions<PostimageModel> options = new FirestoreRecyclerOptions.Builder<PostimageModel>
                 .setQuery(query, PostimageModel.class)
                 .build();
-        adapter = new FirestoreRecyclerAdapter<PostimageModel,PostImageHolder>(options) {
 
-            @NonNull
-            @Override
-            public PostImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_image_items,parent,false);
-                return new PostImageHolder(view);
-            }
+        adapter = new FirestoreRecyclerAdapter<PostimageModel, PostimageHolder>(options);
+        @NonNull
+        @Override
+        public PostimageModel onCreateViewHolder(@NonNull ViewGroup parent, int viewtype){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_image_items, parent, false);
+            return new PostImageHolder(view) ;
+        }
+@Override
+        protected void onBindViewHolder(@NonNull PostImageHolder holder, int position, @NonNull PostimageModel model){
 
-            @Override
-            protected void onBindViewHolder(@NonNull PostImageHolder holder, int position, @NonNull PostimageModel model) {
-                Glide.with(holder.itemView.getContext().getApplicationContext())
-                        .load(model.getImageUrl())
-                        .timeout(6500)
-                        .into(holder.imageView);
-            }
-        };
+            Glide.with(holder.itemView.getcontext().getApplicationContext())
+                    .load(model.getImageURL())
+                    .timeout(6500)
+                    .into(holder.imageView);
+
+    };
     }
-    private static class PostImageHolder extends RecyclerView.ViewHolder{
+     private static class PostImageHolder extends RecyclerView.ViewHolder{
 
         private ImageView imageView;
         public PostImageHolder(@NonNull View itemView){
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.imageView);
+            imageView = itemView.findViewById(R.id.imageview);
         }
 
-    }
+     }
 
     @Override
     public void onStart() {
