@@ -6,24 +6,24 @@ import java.util.Date;
 
 public class PostimageModel {
 
-    private String imageURL, id;
+    private String imageUrl, id;
 
     @ServerTimestamp
 
     private Date timestamp;
 
-    public PostimageModel(String imageURL, String id, Date timestamp) {
-        this.imageURL = imageURL;
+    public PostimageModel(String imageUrl, String id, Date timestamp) {
+        this.imageUrl = imageUrl;
         this.id = id;
         this.timestamp = timestamp;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getId() {
