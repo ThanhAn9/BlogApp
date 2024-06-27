@@ -4,17 +4,18 @@ import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
 
-public class PostimageModel {
-
-    private String imageUrl, id;
-
+public class PostImageModel {
+    private String imageUrl,id,description;
     @ServerTimestamp
-
     private Date timestamp;
 
-    public PostimageModel(String imageUrl, String id, Date timestamp) {
+    public PostImageModel() {
+    }
+
+    public PostImageModel(String imageUrl, String id, String description, Date timestamp) {
         this.imageUrl = imageUrl;
         this.id = id;
+        this.description = description;
         this.timestamp = timestamp;
     }
 
@@ -34,6 +35,14 @@ public class PostimageModel {
         this.id = id;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Date getTimestamp() {
         return timestamp;
     }
@@ -42,4 +51,3 @@ public class PostimageModel {
         this.timestamp = timestamp;
     }
 }
-
