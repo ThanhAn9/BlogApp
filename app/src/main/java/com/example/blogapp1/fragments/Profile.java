@@ -54,7 +54,7 @@ public class Profile extends Fragment {
 
     boolean isMyProfile = true;
     String uid;
-    FirestoreRecyclerAdapter<PostimageModel, PostimageHolder> adapter;
+    //FirestoreRecyclerAdapter<PostimageModel, PostimageHolder> adapter;
 
     public Profile() {
         // Required empty public constructor
@@ -66,7 +66,7 @@ public class Profile extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
-
+/*
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle saveInstanceState) {
         super.onViewCreated(view, saveInstanceState);
@@ -85,7 +85,7 @@ public class Profile extends Fragment {
 
         loadPostImage();
 
-    }
+    }*/
 
     private void init(View view) {
 
@@ -114,7 +114,7 @@ public class Profile extends Fragment {
 
         DocumentReference userRef = FirebaseFirestore.getInstance().collection("User")
                 .document(user.getUid());
-        userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+       /* userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
@@ -147,10 +147,10 @@ public class Profile extends Fragment {
                     }
                 }
             }
-        });
+        });*/
     }
 
-    private  void loadPostImage() {
+    /*private  void loadPostImage() {
 
         if (isMyProfile){
             uid = user.getUid();
@@ -173,7 +173,7 @@ public class Profile extends Fragment {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_image_items, parent, false);
             return new PostImageHolder(view) ;
         }
-@Override
+        @Override
         protected void onBindViewHolder(@NonNull PostImageHolder holder, int position, @NonNull PostimageModel model){
 
             Glide.with(holder.itemView.getcontext().getApplicationContext())
@@ -181,7 +181,7 @@ public class Profile extends Fragment {
                     .timeout(6500)
                     .into(holder.imageView);
 
-    };
+        };
     }
      private static class PostImageHolder extends RecyclerView.ViewHolder{
 
@@ -204,5 +204,5 @@ public class Profile extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
-    }
+    }*/
 }
