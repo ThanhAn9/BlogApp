@@ -6,4 +6,5 @@
     <color name="colorPrimaryDark">#fff</color>
     <color name="colorAccent">#00552E</color>
     <color name="colorGreen">#004827</color>
+    <color name="car_ui_color_accent">#000000</color>
 </resources>

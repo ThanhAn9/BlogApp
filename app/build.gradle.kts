@@ -56,8 +56,8 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
     implementation("com.karumi:dexter:6.2.3")
-    implementation ("com.canhub.cropper:android-image-cropper:4.2.0")
-
+    implementation ("com.theartofdev.edmodo:android-image-cropper:2.8.0")
+    api ("com.theartofdev.edmodo:android-image-cropper:2.8.+")
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
 
