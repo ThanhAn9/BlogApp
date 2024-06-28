@@ -44,8 +44,8 @@
         android:id="@+id/imageview"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:layout_below="@+id/profileImage"
-        android:background="#ff0000"/>
+        android:scaleType="centerCrop"
+        android:layout_below="@+id/profileImage"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -80,10 +80,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/descTv"
+        android:text="Description"
+        android:textStyle="bold"
+        android:layout_below="@+id/linearLayout"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/likeCountTv"
         android:text="100 Likes"
         android:textStyle="bold"
-        android:layout_below="@+id/linearLayout"
+        android:layout_below="@+id/descTv"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"/>
 
