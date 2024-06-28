@@ -31,7 +31,7 @@ public class ForgotPassword extends Fragment {
 
     private TextView loginTv;
     private Button recoverBtn;
-    private EditText emailet;
+    private EditText emailEt;
 
     private FirebaseAuth auth;
     private String email;
@@ -60,7 +60,7 @@ public class ForgotPassword extends Fragment {
 
 
         loginTv = view.findViewById(R.id.loginTV);
-        emailet = view.findViewById(R.id.emailET);
+        emailEt = view.findViewById(R.id.emailET);
         recoverBtn = view.findViewById(R.id.recoverBtn);
         progressBar = view.findViewById(R.id.progressBar);
 
@@ -82,30 +82,31 @@ public class ForgotPassword extends Fragment {
             public void onClick(View v) {
 
 
-                String email = emailet.getText().toString();
+                String email = emailEt.getText().toString();
 
-                if (email.isEmpty() || !email.matches(EMAIL_REGEX)) ;
-                emailet.setError("Input valid email ");
-                return;
+                if (email.isEmpty() || !email.matches(EMAIL_REGEX)) {
+                    emailEt.setError("Input valid email ");
+                    return;
+                }
 
+                progressBar.setVisibility(View.VISIBLE);
+
+                auth.sendPasswordResetEmail(email)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                if (task.isSuccessful()){
+                                    Toast.makeText(getContext(),"Password reset email send successfully",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        });
             }
         });
-        progressBar.setVisibility(View.VISIBLE);
-
-
-        auth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        if (task.isSuccessful()){
-                            Toast.makeText(getContext(),"Password reset email send succesfully",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
-        }
 
     }
+
+}
 
