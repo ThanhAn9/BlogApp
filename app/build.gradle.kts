@@ -7,7 +7,6 @@ android {
     namespace = "com.example.blogapp1"
     compileSdk = 34
 
-
     defaultConfig {
         applicationId = "com.example.blogapp1"
         minSdk = 24
@@ -27,7 +26,6 @@ android {
     }
 
     compileOptions {
-
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -57,13 +55,13 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
-    implementation ("com.karumi:dexter:6.2.3")
-    implementation ("com.theartofdev.edmodo:android-image-cropper:2.8.+")
-    api ("com.theartofdev.edmodo:android-image-cropper:2.8.0")
+    implementation("com.karumi:dexter:6.2.3")
+    implementation ("com.canhub.cropper:android-image-cropper:4.2.0")
+
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0")
 }
