@@ -10,21 +10,28 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toolbar;
 
 import com.example.blogapp1.R;
 import com.example.blogapp1.adapter.HomeAdapter;
 import com.example.blogapp1.model.HomeModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Home extends Fragment {
@@ -53,7 +60,7 @@ public class Home extends Fragment {
 
         init(view);
 
-        reference = FirebaseFirestore.getInstance().collection("Posts").document(user.getUid());
+//        reference = FirebaseFirestore.getInstance().collection("Posts").document(user.getUid());
 
         list = new ArrayList<>();
         adapter = new HomeAdapter(list,getContext());
@@ -64,7 +71,7 @@ public class Home extends Fragment {
     }
 
     private void init(View view) {
-        androidx.appcompat.widget.Toolbar toolbar = view.findViewById(R.id.toolbar);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
         if (getActivity() != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         }
@@ -74,21 +81,50 @@ public class Home extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            // User is signed in
-            // You can perform actions with currentUser here
-        } else {
-            // No user is signed in
-            // Handle this case if needed
-        }
+        user = auth.getCurrentUser();
+//        FirebaseUser currentUser = auth.getCurrentUser();
+//        if (currentUser != null) {
+//            // User is signed in
+//            // You can perform actions with currentUser here
+//        } else {
+//            // No user is signed in
+//            // Handle this case if needed
+//        }
     }
 
 
-    private void loadDataFromFirestore(){
+    private void loadDataFromFirestore() {
 
+        CollectionReference reference = FirebaseFirestore.getInstance().collection("Users")
+                .document(user.getUid())
+                .collection("Post Images");
 
+        reference.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
+                if (error != null) {
+                    Log.e("Error: ", error.getMessage());
+                    return;
+                }
+                assert value != null;
+                for (QueryDocumentSnapshot snapshot : value) {
+
+                    list.add(new HomeModel(snapshot.get("userName").toString(),
+                            snapshot.get("timestamp").toString(),
+                            snapshot.get("profileImage").toString(),
+                            snapshot.get("postImage").toString(),
+                            snapshot.get("uid").toString(),
+                            snapshot.get("comments").toString(),
+                            snapshot.get("description").toString(),
+                            snapshot.get("id").toString(),
+                            Integer.parseInt(snapshot.get("likeCount").toString())
+                    ));
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+        adapter.notifyDataSetChanged();
     }
 
 
