@@ -40,7 +40,10 @@ public class Home extends Fragment {
     HomeAdapter adapter;
     private FirebaseUser user;
     private List<HomeModel> list;
+<<<<<<< HEAD
     public static int LIST_SIZE = 0;
+=======
+>>>>>>> 84ef4a18d16714d80c9396d5f1ef5e72ecc4ae58
 
     public Home() {
         // Required empty public constructor
@@ -101,8 +104,11 @@ public class Home extends Fragment {
                 if (value == null)
                     return;
 
+<<<<<<< HEAD
                 list.clear();
 
+=======
+>>>>>>> 84ef4a18d16714d80c9396d5f1ef5e72ecc4ae58
                 for (QueryDocumentSnapshot snapshot : value) {
 
                     if (!snapshot.exists())
@@ -123,7 +129,10 @@ public class Home extends Fragment {
                     ));
 
                 }adapter.notifyDataSetChanged();
+<<<<<<< HEAD
                 LIST_SIZE=list.size();
+=======
+>>>>>>> 84ef4a18d16714d80c9396d5f1ef5e72ecc4ae58
             }
         });
     }
