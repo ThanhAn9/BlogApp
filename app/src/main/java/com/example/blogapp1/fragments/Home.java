@@ -40,6 +40,7 @@ public class Home extends Fragment {
     HomeAdapter adapter;
     private FirebaseUser user;
     private List<HomeModel> list;
+    public static int LIST_SIZE = 0;
 
     public Home() {
         // Required empty public constructor
@@ -83,9 +84,10 @@ public class Home extends Fragment {
 
     private void loadDataFromFirestore() {
 
-        CollectionReference reference = FirebaseFirestore.getInstance().collection("Users")
+        CollectionReference reference=FirebaseFirestore.getInstance().collection("Users")
                 .document(user.getUid())
                 .collection("Post Images");
+
 
         reference.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
             @Override
@@ -98,6 +100,8 @@ public class Home extends Fragment {
 
                 if (value == null)
                     return;
+
+                list.clear();
 
                 for (QueryDocumentSnapshot snapshot : value) {
 
@@ -119,6 +123,7 @@ public class Home extends Fragment {
                     ));
 
                 }adapter.notifyDataSetChanged();
+                LIST_SIZE=list.size();
             }
         });
     }

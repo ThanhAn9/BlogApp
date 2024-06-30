@@ -4,6 +4,7 @@ package com.example.blogapp1.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,6 +67,7 @@ public class Add extends Fragment {
     private GalleryAdapter adapter;
     Uri imageUri;
     private FirebaseUser user;
+    Dialog dialog;
 
     public Add() {
         // Required empty public constructor
@@ -99,10 +102,6 @@ public class Add extends Fragment {
         adapter.SendImage(new GalleryAdapter.SendImage() {
             @Override
             public void onSend(Uri picUri) {
-                imageUri=picUri;
-
-                imageView.setVisibility(View.VISIBLE);
-                nextBtn.setVisibility(View.VISIBLE);
 
                 CropImage.activity(picUri)
                         .setGuidelines(CropImageView.Guidelines.ON)
@@ -119,6 +118,8 @@ public class Add extends Fragment {
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 final StorageReference storageReference = storage.getReference().child("Post Images/"+System.currentTimeMillis());
 
+                dialog.show();
+
                 storageReference.putFile(imageUri)
                         .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -132,6 +133,9 @@ public class Add extends Fragment {
                                             uploadData(uri.toString());
                                         }
                                     });
+                                } else {
+                                    dialog.dismiss();
+                                    Toast.makeText(getContext(),"Failed to upload post",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -168,10 +172,12 @@ public class Add extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             System.out.println();
+                            Toast.makeText(getContext(),"Uploaded",Toast.LENGTH_SHORT).show();
                         }else {
                             Toast.makeText(getContext(),"Error: "+task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
+                        dialog.dismiss();
                     }
                 });
     }
@@ -185,6 +191,11 @@ public class Add extends Fragment {
         nextBtn = view.findViewById(R.id.nextBtn);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.loading_dialog);
+        dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.dialog_bg,null));
+        dialog.setCancelable(false);
     }
 
     @Override
@@ -235,10 +246,12 @@ public class Add extends Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if(resultCode == RESULT_OK){
-                Uri image = result.getUri();
+
+                assert result != null;
+                imageUri = result.getUri();
 
                 Glide.with(getContext())
-                        .load(image)
+                        .load(imageUri)
                         .into(imageView);
 
                 imageView.setVisibility(View.VISIBLE);

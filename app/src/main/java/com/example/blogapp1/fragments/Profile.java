@@ -2,6 +2,7 @@ package com.example.blogapp1.fragments;
 
 import static android.app.Activity.RESULT_OK;
 import static com.bumptech.glide.Glide.init;
+import static com.example.blogapp1.fragments.Home.LIST_SIZE;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -180,6 +181,8 @@ public class Profile extends Fragment {
 
             }
         });
+
+        postCountTv.setText(""+LIST_SIZE);
     }
 
     private void loadPostImages() {
@@ -188,9 +191,8 @@ public class Profile extends Fragment {
         } else {
 
         }
-        uid = user.getUid();
         DocumentReference reference = FirebaseFirestore.getInstance().collection("Users").document(uid);
-        Query query = reference.collection("Images");
+        Query query = reference.collection("Post Images");
         FirestoreRecyclerOptions<PostImageModel> options = new FirestoreRecyclerOptions.Builder<PostImageModel>()
                 .setQuery(query, PostImageModel.class)
                 .build();
