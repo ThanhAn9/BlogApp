@@ -2,18 +2,15 @@ package com.example.blogapp1.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.blogapp1.R;
 import com.example.blogapp1.adapter.UserAdapter;
 import com.example.blogapp1.model.Users;
@@ -26,13 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
-import com.example.blogapp1.R;
 
 public class Search extends Fragment {
     SearchView searchView;
@@ -40,20 +32,16 @@ public class Search extends Fragment {
     UserAdapter adapter;
     CollectionReference reference;
     private List<Users> list;
-
     OnDataPass onDataPass;
-
-
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
         onDataPass = (OnDataPass) context;
     }
 
-    public Search(){
-
+    public Search() {
+        // Required empty public constructor
     }
 
     @Override
@@ -66,19 +54,14 @@ public class Search extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         init(view);
-        CollectionReference reference = FirebaseFirestore.getInstance().collection("Users");
+        reference = FirebaseFirestore.getInstance().collection("Users"); // Khởi tạo reference tại đây
         loadUserData();
-
         searchUser();
-
         clickListener();
-
     }
 
     private void clickListener() {
-
         adapter.OnUserClicked(new UserAdapter.OnUserClicked() {
             @Override
             public void onClicked(String uid) {
@@ -91,16 +74,13 @@ public class Search extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
-                reference.orderBy("name").startAt(query).endAt(query+"\uf8ff").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                reference.orderBy("name").startAt(query).endAt(query + "\uf8ff").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             list.clear();
-                            for (DocumentSnapshot snapshot : task.getResult()){
-                                if(!snapshot.exists())
-                                    return;
-
+                            for (DocumentSnapshot snapshot : task.getResult()) {
+                                if (!snapshot.exists()) return;
                                 Users users = snapshot.toObject(Users.class);
                                 list.add(users);
                             }
@@ -108,14 +88,12 @@ public class Search extends Fragment {
                         }
                     }
                 });
-
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText.equals(" "))
-                    loadUserData();
+                if (newText.equals(" ")) loadUserData();
                 return false;
             }
         });
@@ -125,12 +103,10 @@ public class Search extends Fragment {
         reference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error !=null)
-                    return;
-
-                if(value == null)
-                    return;
-                for(QueryDocumentSnapshot snapshot:value){
+                if (error != null) return;
+                if (value == null) return;
+                list.clear(); // Xóa danh sách cũ trước khi thêm dữ liệu mới
+                for (QueryDocumentSnapshot snapshot : value) {
                     Users users = snapshot.toObject(Users.class);
                     list.add(users);
                 }
@@ -139,18 +115,17 @@ public class Search extends Fragment {
         });
     }
 
-    private void init(View view){
+    private void init(View view) {
         searchView = view.findViewById(R.id.searchView);
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         list = new ArrayList<>();
         adapter = new UserAdapter(list);
         recyclerView.setAdapter(adapter);
     }
-    public interface  OnDataPass{
+
+    public interface OnDataPass {
         void onChange(String uid);
     }
-
 }
