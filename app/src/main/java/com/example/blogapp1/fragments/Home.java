@@ -54,13 +54,13 @@ public class Home extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         init(view);
 
         list = new ArrayList<>();
-        adapter = new HomeAdapter(list,getContext());
+        adapter = new HomeAdapter(list, getContext());
         recyclerView.setAdapter(adapter);
 
         loadDataFromFirestore();
@@ -84,12 +84,12 @@ public class Home extends Fragment {
 
     private void loadDataFromFirestore() {
 
-        CollectionReference reference=FirebaseFirestore.getInstance().collection("Users")
+        CollectionReference reference = FirebaseFirestore.getInstance().collection("Users")
                 .document(user.getUid())
                 .collection("Post Images");
 
 
-        reference.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+        reference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
@@ -121,8 +121,9 @@ public class Home extends Fragment {
                             model.getLikeCount()
                     ));
 
-                }adapter.notifyDataSetChanged();
-                LIST_SIZE=list.size();
+                }
+                adapter.notifyDataSetChanged();
+                LIST_SIZE = list.size();
             }
         });
     }

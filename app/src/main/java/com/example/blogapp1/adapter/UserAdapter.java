@@ -58,7 +58,13 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserHolder> {
                 .placeholder(R.drawable.ic_person)
                 .timeout(6500).into(holder.profileImage);
 
-        holder.clickListener(position, list.get(position).getUid());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onUserClicked.onClicked(list.get(position).getUid());
+            }
+        });
 
     }
 
@@ -67,7 +73,7 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserHolder> {
         return list.size();
     }
 
-    class UserHolder extends  RecyclerView.ViewHolder{
+    static class UserHolder extends  RecyclerView.ViewHolder{
         private CircleImageView profileImage;
         private TextView nameTV,statusTV;
         private RelativeLayout layout;
@@ -79,21 +85,13 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserHolder> {
             statusTV = itemView.findViewById(R.id.statusTV);
             layout = itemView.findViewById(R.id.relativeLayout);
         }
-        private void clickListener(int position, final String uid){
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    onUserClicked.onClicked(position,uid);
-                }
-            });
-        }
     }
     public void OnUserClicked(OnUserClicked onUserClicked){
         this.onUserClicked=onUserClicked;
     }
     public interface OnUserClicked{
-        void onClicked(int position, String uid);
+        void onClicked(String uid);
     }
 
 }

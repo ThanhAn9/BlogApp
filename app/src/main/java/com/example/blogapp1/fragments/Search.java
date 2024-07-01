@@ -81,8 +81,8 @@ public class Search extends Fragment {
 
         adapter.OnUserClicked(new UserAdapter.OnUserClicked() {
             @Override
-            public void onClicked(int position, String uid) {
-                onDataPass.onChange(4);
+            public void onClicked(String uid) {
+                onDataPass.onChange(uid);
             }
         });
     }
@@ -122,8 +122,6 @@ public class Search extends Fragment {
     }
 
     private void loadUserData() {
-
-
         reference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -152,7 +150,7 @@ public class Search extends Fragment {
         recyclerView.setAdapter(adapter);
     }
     public interface  OnDataPass{
-        void onChange(int position);
+        void onChange(String uid);
     }
 
 }
