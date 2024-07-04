@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements Search.OnDataPass
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home_fill);
 
+        // Đã xem
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements Search.OnDataPass
                 }
             }
 
+            // Đã xem
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements Search.OnDataPass
                 }
             }
 
+            // Da xem
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {

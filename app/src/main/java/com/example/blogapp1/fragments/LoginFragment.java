@@ -92,6 +92,7 @@ public class LoginFragment extends Fragment {
 
 
     }
+    // Đã xem full
     private void clickListener() {
         forgotPasswordTv.setOnClickListener(new View.OnClickListener() {
             @Override

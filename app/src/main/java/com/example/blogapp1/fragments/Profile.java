@@ -206,22 +206,19 @@ public class Profile extends Fragment {
         countLayout = view.findViewById(R.id.countLayout);
         editProfileBtn = view.findViewById(R.id.edit_profileImage);
 
-
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
-
     }
-
     private void loadBasicData() {
 
         DocumentReference userRef = FirebaseFirestore.getInstance().collection("Users")
-                .document(userUID);
+                .document(user.getUid());
 
+        // da xem xem den dong 237
         userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-
                 if (error != null)
                     return;
 
@@ -232,15 +229,12 @@ public class Profile extends Fragment {
                     String status = value.getString("status");
                     int followers = value.getLong("followers").intValue();
                     int following = value.getLong("following").intValue();
-
                     String profileURL = value.getString("profileImage");
-
                     nameTv.setText(name);
                     toolbarNameTv.setText(name);
                     statusTv.setText(status);
                     followersCountTv.setText(String.valueOf(followers));
                     followingCountTv.setText(String.valueOf(following));
-
 //                    followersList = (List<Object>) value.get("followers");
 //                    followingList = (List<Object>) value.get("following");
 //

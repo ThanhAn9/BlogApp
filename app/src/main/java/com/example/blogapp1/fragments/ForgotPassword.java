@@ -29,13 +29,13 @@ import org.w3c.dom.Text;
 
 public class ForgotPassword extends Fragment {
 
-    private TextView loginTv;
-    private Button recoverBtn;
-    private EditText emailEt;
+    private TextView loginTv; // rồi
+    private Button recoverBtn;// rồi
+    private EditText emailEt;// rồi
 
-    private FirebaseAuth auth;
+    private FirebaseAuth auth;// rồi
     private String email;
-    private ProgressBar progressBar;
+    private ProgressBar progressBar; // rồi
 
     public ForgotPassword() {
         // Required empty public constructor
@@ -50,12 +50,12 @@ public class ForgotPassword extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         init(view);
 
         clickListener();
     }
 
+    // Đã xem
     private void init(View view){
 
 
@@ -63,8 +63,6 @@ public class ForgotPassword extends Fragment {
         emailEt = view.findViewById(R.id.emailET);
         recoverBtn = view.findViewById(R.id.recoverBtn);
         progressBar = view.findViewById(R.id.progressBar);
-
-
         auth = FirebaseAuth.getInstance();
     }
 
@@ -80,7 +78,6 @@ public class ForgotPassword extends Fragment {
         recoverBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 String email = emailEt.getText().toString();
 
@@ -99,8 +96,13 @@ public class ForgotPassword extends Fragment {
                                 if (task.isSuccessful()){
                                     Toast.makeText(getContext(),"Password reset email send successfully",
                                             Toast.LENGTH_SHORT).show();
+                                    emailEt.setText("");
+                                }else
+                                {
+                                    String errMsg = task.getException().getMessage();
+                                    Toast.makeText(getContext(),"Error: "+errMsg, Toast.LENGTH_SHORT).show();
                                 }
-                                progressBar.setVisibility(View.GONE);
+                               progressBar.setVisibility(View.GONE);
                             }
                         });
             }

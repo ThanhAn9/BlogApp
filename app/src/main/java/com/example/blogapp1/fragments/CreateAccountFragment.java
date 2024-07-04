@@ -68,6 +68,7 @@ public class CreateAccountFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         auth = FirebaseAuth.getInstance();
     }
+    // Đã xem
     private void clickListener() {
         loginTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,15 +89,15 @@ public class CreateAccountFragment extends Fragment {
                     return;
                 }
                 if(email.isEmpty() || !email.matches(EMAIL_REGEX )){
-                    nameET.setError("Please input valid email");
+                    emailET.setError("Please input valid email");
                     return;
                 }
                 if(password.isEmpty() || password.length() < 6){
-                    nameET.setError("Please input valid password");
+                    passwordET.setError("Please input valid password");
                     return;
                 }
                 if(!password.equals(confirmPassword)){
-                    nameET.setError("Password not match");
+                    confirmPasswordEt.setError("Password not match");
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
@@ -105,7 +106,7 @@ public class CreateAccountFragment extends Fragment {
         });
     }
 
-    private void createAccount(String name, String email, String password) {
+    private void createAccount(final String name, final String email, String password) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -146,12 +147,9 @@ public class CreateAccountFragment extends Fragment {
         map.put("email", email);
         map.put("profileImage"," ");
         map.put("uid", user.getUid());
-        map.put("status"," ");
-        map.put("search", name.toLowerCase());
-
-
+        map.put("status"," "); // video 9 chua co
+        map.put("search", name.toLowerCase());// video 9 chua co
         map.put("followers", list);
-
         map.put("following", list1);
 
         FirebaseFirestore.getInstance().collection("Users").document(user.getUid())
