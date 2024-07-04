@@ -100,6 +100,8 @@ public class Search extends Fragment {
     }
 
     private void loadUserData() {
+
+        CollectionReference reference = FirebaseFirestore.getInstance().collection("User");
         reference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {

@@ -101,8 +101,6 @@ public class Profile extends Fragment {
         super.onViewCreated(view, saveInstanceState);
         init(view);
 
-
-
         if(IS_SEARCHED_USER){
             isMyProfile = false;
             userUID = USER_ID;
