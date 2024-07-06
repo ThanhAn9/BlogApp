@@ -97,10 +97,8 @@ public class Home extends Fragment {
                     Log.e("Error: ", error.getMessage());
                     return;
                 }
-
                 if (value == null)
                     return;
-
                 list.clear();
                 for (QueryDocumentSnapshot snapshot : value) {
 
